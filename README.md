@@ -5,6 +5,13 @@ simple application to demonstrate how to call Haskell from JavaScript and vice
 versa. This application uses [raylib](https://www.raylib.com/) to display
 graphics in a browser.
 
+A minimal game is included for reference:
+
+1. Use arrow keys to control the player
+1. If the player goes outside the boundaries, the game is lost
+
+![](./haskell-game.png)
+
 ## Prerequisites
 
 To run this project you will need to have installed Nix, Cabal, Emscripten, and NodeJS
