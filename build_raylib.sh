@@ -55,11 +55,13 @@ echo $'Bindings compiled successfully!\n'
 
 echo "Moving output files..."
 
+mkdir -p ./public
+
 rm -f ./public/raylib.wasm
-mv raylib.wasm ./public
+mv raylib.wasm ./public/
 
 rm -f ./src/raylib.js
-mv raylib.js ./src
+mv raylib.js ./src/
 
 rm -f raylib.worker.js
 
