@@ -44,6 +44,8 @@ emcc cbits/rl_bindings.c raylib/src/libraylib.a \
   -sMODULARIZE \
   -sEXPORT_NAME=Raylib \
   -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,setMainLoop \
+  -sEXPORTED_FUNCTIONS="['_free', '_malloc']" \
+  -sGL_ENABLE_GET_PROC_ADDRESS \
   \
   -Wno-pthreads-mem-growth \
   \
