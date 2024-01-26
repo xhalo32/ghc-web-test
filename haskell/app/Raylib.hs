@@ -1,9 +1,13 @@
 {-# OPTIONS -Wall #-}
-module Raylib (initWindow, closeWindow, setTargetFPS, beginDrawing, endDrawing, clearBackground, getScreenHeight, drawFPS, drawText, drawRectangle, isKeyDown, isMouseButtonPressed, Key (..), keyToCode) where
+
+-- See the cheatsheet for additional functions https://www.raylib.com/cheatsheet/cheatsheet.html
+-- Note: Doubles are not implemented yet
+module Raylib where
 
 import Foreign (with, toBool)
 import Foreign.C (CInt, CUInt, withCString, CBool)
 import Native (callRaylibFunction)
+import Foreign.Storable
 
 initWindow :: Int -> Int -> String -> IO ()
 initWindow width height title =
@@ -51,11 +55,50 @@ isKeyDown key = toBool <$> (callRaylibFunction "_IsKeyDown_" (fromIntegral key :
 isMouseButtonPressed :: Int -> IO Bool
 isMouseButtonPressed button = toBool <$> (callRaylibFunction "_IsMouseButtonPressed_" (fromIntegral button :: CInt) :: IO CBool)
 
+drawPixel :: Int -> Int -> Integer -> IO ()
+drawPixel posX posY color =
+  with
+  (fromIntegral color :: CUInt)
+  (callRaylibFunction "_DrawPixel_" (fromIntegral posX :: CInt) (fromIntegral posY :: CInt))
+
+drawLine :: Int -> Int -> Int -> Int -> Integer -> IO ()
+drawLine posX posY width height color =
+  with
+  (fromIntegral color :: CUInt)
+  (callRaylibFunction "_DrawLine_" (fromIntegral posX :: CInt) (fromIntegral posY :: CInt) (fromIntegral width :: CInt) (fromIntegral height :: CInt))
+
 drawRectangle :: Int -> Int -> Int -> Int -> Integer -> IO ()
 drawRectangle posX posY width height color =
   with
   (fromIntegral color :: CUInt)
   (callRaylibFunction "_DrawRectangle_" (fromIntegral posX :: CInt) (fromIntegral posY :: CInt) (fromIntegral width :: CInt) (fromIntegral height :: CInt))
+
+drawCircle :: Int -> Int -> Int -> Integer -> IO ()
+drawCircle posX posY radius color =
+  with
+  (fromIntegral color :: CUInt)
+  (callRaylibFunction "_DrawCircle_" (fromIntegral posX :: CInt) (fromIntegral posY :: CInt) (fromIntegral radius :: CInt))
+
+data Rect = Rect
+        { x :: Int
+        , y :: Int
+        , w :: Int
+        , h :: Int
+        }
+
+instance Storable Rect where
+  alignment _ = 8
+  sizeOf _    = 32
+  peek ptr    = Rect
+      <$> peekByteOff ptr 0
+      <*> peekByteOff ptr 8
+      <*> peekByteOff ptr 16
+      <*> peekByteOff ptr 24
+  poke ptr (Rect x y w h) = do
+      pokeByteOff ptr 0 x
+      pokeByteOff ptr 8 y
+      pokeByteOff ptr 16 w
+      pokeByteOff ptr 24 h
 
 -- How to pass double from callRaylibFunction in index.ts?
 -- getTime :: IO Double

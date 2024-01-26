@@ -13,8 +13,8 @@ import Raylib
     getScreenHeight,
     initWindow,
     setTargetFPS, isKeyDown, isMouseButtonPressed,
-    drawRectangle,
-    Key (..), keyToCode,
+    drawRectangle, drawCircle,
+    Key (..), keyToCode, drawPixel, drawLine,
   )
 
 data Direction = Right | Left | Down | Up
