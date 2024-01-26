@@ -16,14 +16,36 @@ A minimal game is included for reference:
 
 To run this project you will need to have installed Nix, Cabal, Emscripten, and NodeJS
 
-## Running the code
+## Quickstart
+
+In one terminal run the following commands to build pre-requisites
+
+``` sh
+nix shell nixpkgs#emscripten -c sh build_raylib.sh
+nix shell nixpkgs#nodejs -c npm install
+```
+
+Then start a watcher to listen to changes in the haskell directory 
+
+``` sh
+nix shell https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/archive/master/ghc-wasm-meta-master.tar.gz
+while inotifywait -e close_write haskell/**/*.hs; do sh build_haskell.sh; done
+```
+
+In another terminal, start the development server
+
+``` sh
+nix shell nixpkgs#nodejs -c npm run serve
+```
+
+## Slowstart
 
 ### Compile the Haskell code
 
 Run the following command (you will need to do this in WSL if you're on Windows):
 
 ```sh
-nix shell https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/archive/master/ghc-wasm-meta-master.tar.gz --extra-experimental-features nix-command --extra-experimental-features flakes
+nix shell https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/archive/master/ghc-wasm-meta-master.tar.gz
 ```
 
 This will enter a nix flake with the GHC to WASM compiler available. Now run
